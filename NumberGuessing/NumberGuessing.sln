@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberGuessing", "NumberGuessing\NumberGuessing.csproj", "{E51E0720-4E41-4277-BA71-A8E2E3FA9470}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberGuessing", "NumberGuessing\NumberGuessing.csproj", "{A83DE5E4-CDA3-44FA-A96F-B6C43A6E6438}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E51E0720-4E41-4277-BA71-A8E2E3FA9470}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E51E0720-4E41-4277-BA71-A8E2E3FA9470}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E51E0720-4E41-4277-BA71-A8E2E3FA9470}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E51E0720-4E41-4277-BA71-A8E2E3FA9470}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A83DE5E4-CDA3-44FA-A96F-B6C43A6E6438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A83DE5E4-CDA3-44FA-A96F-B6C43A6E6438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A83DE5E4-CDA3-44FA-A96F-B6C43A6E6438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A83DE5E4-CDA3-44FA-A96F-B6C43A6E6438}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {00857F8E-A39D-4C53-ACF5-C3105FC33E5C}
+		SolutionGuid = {16606469-AA4C-4F85-8E78-1356AC0055C9}
 	EndGlobalSection
 EndGlobal
