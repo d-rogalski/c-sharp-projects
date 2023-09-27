@@ -18,18 +18,24 @@
                 }
             }
         }
-        static bool DoInRobust(Action action, string header)
+        /// <summary>
+        /// Invokes <paramref name="action"/> until a correct user input is provided.
+        /// </summary>
+        /// <param name="action">Action to invoke</param>
+        /// <param name="header">Header of the console</param>
+        /// <returns></returns>
+        static bool DoInRobust(Action action, string header = "")
         {
             do
             {
                 try
                 {
                     Console.Clear();
-                    Console.WriteLine(header);
+                    Console.Write(header);
                     action.Invoke();
                     return true;
                 }
-                catch (FormatException)
+                catch (ArgumentNullException)
                 {
                     Console.WriteLine("Thank you for your game, come back again!");
                     return false;

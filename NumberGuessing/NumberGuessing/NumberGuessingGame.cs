@@ -1,12 +1,33 @@
 ﻿namespace NumberGuessing
 {
+    /// <summary>
+    /// A class providing a full funcionality of the number guessing game.
+    /// </summary>
     internal class NumberGuessingGame
     {
-        public readonly string Header = "-----Number Guessing Game-----";
+        /// <summary>
+        /// Header of the game, that can be displayed at the top of the console.
+        /// </summary>
+        public readonly string Header = "-----Number Guessing Game-----\n";
+        /// <summary>
+        /// Seed of the RNG used to generate the numbers.
+        /// </summary>
         public int Seed { get; }
+        /// <summary>
+        /// Upper bound of the numbers to generate.
+        /// </summary>
         public int Maximum { get; set; }
+        /// <summary>
+        /// Score of the current game - number of correct guesses.
+        /// </summary>
         public int Score { get => score; }
+        /// <summary>
+        /// Count of the current game - number of generated numbers.
+        /// </summary>
         public int Count { get => count; }
+        /// <summary>
+        /// Name of the game's difficulty level.
+        /// </summary>
         public string Difficulty
         {
             get
@@ -29,12 +50,30 @@
             }
         }
 
-
+        /// <summary>
+        /// Random number generator for the game.
+        /// </summary>
         private readonly Random rng;
-        private int count, score;
+        /// <summary>
+        /// Variable storing the number of guesses.
+        /// </summary>
+        private int count;
+        /// <summary>
+        /// Variable storing the number of points
+        /// </summary>
+        private int score;
+        /// <summary>
+        /// Variable storing the last generated number
+        /// </summary>
         private int currentNumber;
+        /// <summary>
+        /// Variable storing the difficulty level
+        /// </summary>
         private int difficulty;
 
+        /// <summary>
+        /// Creates a new game object with the default difficulty (Easy) and default seed (tick count) for RNG.
+        /// </summary>
         public NumberGuessingGame()
         {
             Seed = Environment.TickCount;
@@ -43,6 +82,9 @@
             difficulty = 2;
             rng = new Random(Seed);
         }
+        /// <summary>
+        /// Creates a new game object with the default difficulty (Easy) and the provided seed for RNG.
+        /// </summary>
         public NumberGuessingGame(int seed)
         {
             Seed = seed;
@@ -51,18 +93,24 @@
             difficulty = 2;
             rng = new Random(Seed);
         }
-
+        /// <summary>
+        /// Generates a new random number and prints a message about it.
+        /// </summary>
         private void GenerateNumber()
         {
             currentNumber = rng.Next(1, Maximum + 1);
             Console.WriteLine("A new number has been generated.");
         }
-
+        /// <summary>
+        /// Provides a single round of the game with taking the input from the player and printing the result.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">User wants to exit the game.</exception>
         public void MakeGuess()
         {
             GenerateNumber();
             Console.WriteLine("Make your guess or press enter to exit the game: ");
-            int guess = Convert.ToInt32(Console.ReadLine());
+            int tmp;
+            int guess = int.TryParse(Console.ReadLine(), out tmp) ? tmp : 0;
 
             count++;
             if (guess == currentNumber)
@@ -81,19 +129,26 @@
             Console.WriteLine("Press enter to continue...");
             Console.ReadLine();
         }
+        /// <summary>
+        /// Provides a difficulty selection menu.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Incorrect choice.</exception>
+        /// <exception cref="ArgumentNullException">Exit the game.</exception>
         public void SetDifficulty()
         {
-            Console.WriteLine("Choose difficulty level:");
-            Console.WriteLine("1 - Very Easy (Numbers from 1 to 2");
-            Console.WriteLine("2 - Easy (Numbers from 1 to 4");
-            Console.WriteLine("3 - Medium (Numbers from 1 to 6");
-            Console.WriteLine("4 - Hard (Numbers from 1 to 10");
-            Console.WriteLine("5 - Very Hard (Numbers from 1 to 15");
-            Console.WriteLine("Or press enter to exit...");
+            Console.WriteLine("Choose difficulty level:\n" +
+                "1 - Very Easy (Numbers from 1 to 2)\n" +
+                "2 - Easy (Numbers from 1 to 4)\n" +
+                "3 - Medium (Numbers from 1 to 6)\n" +
+                "4 - Hard (Numbers from 1 to 10)\n" +
+                "5 - Very Hard (Numbers from 1 to 15)\n" +
+                "Or press enter to exit...");
 
-            difficulty = Convert.ToInt32(Console.ReadLine());
+            difficulty = int.TryParse(Console.ReadLine(), out difficulty) ? difficulty : 0;
             switch (difficulty)
             {
+                case 0:
+                    throw new ArgumentNullException();
                 case 1:
                     Maximum = 2;
                     break;
