@@ -10,7 +10,7 @@
         <ListBox x:Name="noteList" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="642,47,10,10" SelectionChanged="noteList_SelectionChanged">
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Delete" Click="addNoteButton_MenuItemDelete_Click"/>
+                    <MenuItem Header="Delete" Click="noteList_MenuItemDelete_Click"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
