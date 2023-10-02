@@ -5,6 +5,8 @@
     [PhoneNumber] VARCHAR (20) NOT NULL,
     [EmailAddress] VARCHAR (50) NULL,
     [Company]     VARCHAR (50) NULL,
+    [Icon]        IMAGE        NULL,
+    [Favourite]   BIT          DEFAULT ((0)) NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

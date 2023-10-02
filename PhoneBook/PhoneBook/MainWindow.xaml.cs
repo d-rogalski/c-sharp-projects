@@ -30,7 +30,6 @@ namespace PhoneBook
                                         Application Intent=ReadWrite;
                                         Multi Subnet Failover=False;
                                         Initial Catalog=PhoneBook");
-        public List<Contact> allContacts = new();
         public List<Contact> contacts;
         public MainWindow()
         {
@@ -39,8 +38,7 @@ namespace PhoneBook
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            allContacts = ModelView.ExtractContacts(db.ExecuteQuery("SELECT * FROM Contact;"));
-            ModelView.SearchUpdate("", allContacts, out contacts);
+            RefreshContacts();
             contactList.ItemsSource = contacts;
         }
 
@@ -59,13 +57,26 @@ namespace PhoneBook
 
         private void RefreshContacts()
         {
-            contacts.Sort(Contact.SortDescending());
+            contacts = db.ExtractContacts(searchTextBox.Text);
+            contactList.ItemsSource = contacts;
         }
 
         private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ModelView.SearchUpdate(searchTextBox.Text, allContacts, out contacts);
             RefreshContacts();
+        }
+
+        private void contactList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var currentContact = contacts[contactList.SelectedIndex];
+            var contactInfo = db.GetContactInfo(currentContact.Id);
+            firsNameTextBox.Text = contactInfo["FirstName"];
+            lastNameTextBox.Text = contactInfo["LastName"];
+            phoneNumberTextBox.Text = contactInfo["PhoneNumber"];
+            emailAddressTextBox.Text = contactInfo["EmailAddress"];
+            companyTextBox.Text = contactInfo["Company"];
+            favouriteCheckBox.IsChecked = currentContact.Favourite;
+            if (currentContact.Icon != null) displayIcon.Fill = Utils.Convert(currentContact.Icon);          
         }
     }
 }
