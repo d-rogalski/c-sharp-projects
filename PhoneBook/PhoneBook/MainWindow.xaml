@@ -29,7 +29,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" MaxWidth="50" MinWidth="50">
-                                    <Image Width="32" Height="32" Source="default_icon.png"/>
+                                    <Image Width="32" Height="32" Source="images/default_icon.png"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -55,7 +55,7 @@
         </ListView>
         <Ellipse x:Name="displayIcon" Height="128" Stroke="Black" Width="128" Margin="276,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StrokeThickness="2" IsEnabled="False">
             <Ellipse.Fill>
-                <ImageBrush ImageSource="default_icon.png" Stretch="Fill"/>
+                <ImageBrush x:Name="displayIconImg"  ImageSource="images/default_icon.png" Stretch="Fill"/>
             </Ellipse.Fill>
         </Ellipse>
         <CheckBox x:Name="favouriteCheckBox" Content="Favourite" HorizontalAlignment="Left" Margin="208,385,0,0" VerticalAlignment="Top"/>
@@ -72,5 +72,6 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+        <Button x:Name="acceptButton" Content="Accept" HorizontalAlignment="Left" Margin="340,407,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.052" Width="100" Height="23" Click="acceptButton_Click"/>
     </Grid>
 </Window>

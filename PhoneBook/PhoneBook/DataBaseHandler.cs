@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Data.SqlClient;
 using Microsoft.Identity.Client;
+using System.Diagnostics;
 
 namespace PhoneBook
 {
@@ -21,7 +22,7 @@ namespace PhoneBook
         {
             cnn.Close();
         }
-        public SqlDataReader ExecuteQuery(string query)
+        private SqlDataReader ExecuteQuery(string query)
         {
             var cmd = new SqlCommand(query, cnn);
             return cmd.ExecuteReader();
@@ -49,12 +50,12 @@ namespace PhoneBook
             using var reader = ExecuteQuery(query);
 
             Dictionary<string, string> result = new();
-            while (reader.Read())
+            if (reader.Read())
             {
                 object[] values = new object[reader.FieldCount];
                 reader.GetValues(values);
 
-                for (int i = 0; i < reader.FieldCount - 2; i++)
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
                     Utils.LoadSafely(values[i], out string? tmp);
                     result[fieldNames[i]] = tmp ?? "";

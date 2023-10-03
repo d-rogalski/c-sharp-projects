@@ -30,25 +30,41 @@ namespace PhoneBook
                                         Application Intent=ReadWrite;
                                         Multi Subnet Failover=False;
                                         Initial Catalog=PhoneBook");
-        public List<Contact> contacts;
+        public List<Contact> contacts = new();
+        private void ChangeToEdit(bool value)
+        {
+            firsNameTextBox.IsEnabled = value;
+            lastNameTextBox.IsEnabled = value;
+            phoneNumberTextBox.IsEnabled = value;
+            emailAddressTextBox.IsEnabled = value;
+            companyTextBox.IsEnabled = value;
+            favouriteCheckBox.IsEnabled = value;
+            displayIcon.IsEnabled = value;
+            acceptButton.Visibility = value ? Visibility.Visible : Visibility.Hidden;
+
+            _editable = value;
+        }
+        private bool _editable;
         public MainWindow()
         {
             InitializeComponent();
+
+            RefreshContacts();
+            contactList.ItemsSource = contacts;
+            ChangeToEdit(false);
         }
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            RefreshContacts();
-            contactList.ItemsSource = contacts;
+        {      
         }
 
         private void contactList_MenuItemAdd_Click(object sender, EventArgs e)
         {
-
+            ChangeToEdit(true);
         }
         private void contactList_MenuItemEdit_Click(object sender, EventArgs e)
         {
-
+            ChangeToEdit(true);
         }
         private void contactList_MenuItemDelete_Click(object sender, EventArgs e)
         {
@@ -76,7 +92,14 @@ namespace PhoneBook
             emailAddressTextBox.Text = contactInfo["EmailAddress"];
             companyTextBox.Text = contactInfo["Company"];
             favouriteCheckBox.IsChecked = currentContact.Favourite;
-            if (currentContact.Icon != null) displayIcon.Fill = Utils.Convert(currentContact.Icon);          
+            if (currentContact.Icon != null) displayIcon.Fill = Utils.ConvertImage(currentContact.Icon);
+            else displayIcon.Fill = Utils.ConvertImage("images/default_icon.png");
+        }
+
+        private void acceptButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeToEdit(false);
+
         }
     }
 }
