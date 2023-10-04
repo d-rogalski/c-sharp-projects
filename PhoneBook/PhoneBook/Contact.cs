@@ -12,10 +12,17 @@ namespace PhoneBook
     public class Contact
     {
         public int Id { get; }
-        public Image? Icon { get; }
+        public Image? Icon { get; set; }
         public string DisplayName { get; }
         public bool Favourite { get; }
 
+        public Contact() 
+        {
+            Id = -1;
+            Icon = null;
+            DisplayName = "";
+            Favourite = false;
+        }
         public Contact(object[] objects)
         {
             Id = (int)objects[0];

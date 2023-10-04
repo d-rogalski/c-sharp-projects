@@ -21,17 +21,23 @@ namespace PhoneBook
             if (DBNull.Value.Equals(obj)) result = default;
             else result = (T)obj;
         }
-        public static ImageBrush ConvertImage(System.Drawing.Image img)
+        public static ImageBrush ImageToImageBrush(Image img)
         {
             var bitmap = new System.Drawing.Bitmap(img);
             var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             bitmap.Dispose();
             return new ImageBrush(bitmapSource);
         }
-        public static ImageBrush ConvertImage(string path)
+        public static ImageBrush ImageToImageBrush(string path)
         {
             var img = Image.FromFile(path);
-            return ConvertImage(img);
+            return ImageToImageBrush(img);
+        }
+        public static byte[] ImageToBytes(Image img)
+        {
+            ImageConverter imgConv = new ImageConverter();
+            byte[] bytes = (byte[])imgConv.ConvertTo(img, typeof(byte[]));
+            return bytes;
         }
     }
 }

@@ -7,6 +7,9 @@ using System.Text;
 using Microsoft.Data.SqlClient;
 using Microsoft.Identity.Client;
 using System.Diagnostics;
+using System.Drawing;
+using System.Net.Mail;
+using System.Security.Cryptography;
 
 namespace PhoneBook
 {
@@ -24,6 +27,7 @@ namespace PhoneBook
         }
         private SqlDataReader ExecuteQuery(string query)
         {
+            Debug.Write(query);
             var cmd = new SqlCommand(query, cnn);
             return cmd.ExecuteReader();
         }
@@ -31,7 +35,8 @@ namespace PhoneBook
         {
             string query = "SELECT * " +
                 "FROM (SELECT Id, CONCAT(FirstName, ' ', LastName) AS DisplayName, Icon, Favourite FROM Contact) AS sub " +
-                $"WHERE sub.DisplayName LIKE '%{searchFor}%';";
+                $"WHERE sub.DisplayName LIKE '%{searchFor}%' " +
+                $"ORDER BY Favourite DESC, DisplayName;";
             using var reader = ExecuteQuery(query);
             
             List<Contact> list = new();
@@ -62,6 +67,26 @@ namespace PhoneBook
                 }
             }
             return result;
+        }
+
+        public void UpdateContact(int id, string firstName, string lastName, string phoneNumber, string emailAddress, string company, Image icon, bool favourite)
+        {
+            string query = $"UPDATE Contact " +
+                $"SET FirstName = '{firstName}', " +
+                $"LastName = '{lastName}', " +
+                $"PhoneNumber = '{phoneNumber}', " +
+                $"EmailAddress = '{emailAddress}', " +
+                $"Company = '{company}', " +
+                $"Icon = {(icon == null ? "NULL" : Utils.ImageToBytes(icon))}, " +
+                $"Favourite = {(favourite ? 1 : 0)} " +
+                $"WHERE Id = {id};";
+            using var reader = ExecuteQuery(query);
+        }
+        public void AddContact(string firstName, string lastName, string phoneNumber, string emailAddress, string company, Image? icon, bool favourite)
+        {
+            string query = $"INSERT INTO Contact (FirstName, LastName, PhoneNumber, EmailAddress, Company, Icon, Favourite) " +
+                $"VALUES ('{firstName}', '{lastName}', '{phoneNumber}', '{emailAddress}', '{company}', {(icon == null ? "NULL" : Utils.ImageToBytes(icon))}, {(favourite ? 1 : 0)});";
+            using var reader = ExecuteQuery(query);
         }
     }
 }

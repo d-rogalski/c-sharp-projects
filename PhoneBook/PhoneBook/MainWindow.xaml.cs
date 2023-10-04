@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Identity.Client;
+using System.Configuration;
 
 namespace PhoneBook
 {
@@ -31,6 +33,13 @@ namespace PhoneBook
                                         Multi Subnet Failover=False;
                                         Initial Catalog=PhoneBook");
         public List<Contact> contacts = new();
+        private Contact CurrentContact { 
+            get
+            {
+                if (contactList.SelectedIndex != -1) return contacts[contactList.SelectedIndex];
+                else return _newContact; 
+            } }
+        private Contact _newContact;
         private void ChangeToEdit(bool value)
         {
             firsNameTextBox.IsEnabled = value;
@@ -40,6 +49,7 @@ namespace PhoneBook
             companyTextBox.IsEnabled = value;
             favouriteCheckBox.IsEnabled = value;
             displayIcon.IsEnabled = value;
+            contactList.IsEnabled = !value;
             acceptButton.Visibility = value ? Visibility.Visible : Visibility.Hidden;
 
             _editable = value;
@@ -60,11 +70,13 @@ namespace PhoneBook
 
         private void contactList_MenuItemAdd_Click(object sender, EventArgs e)
         {
+            contactList.SelectedIndex = -1;
+            _newContact = new Contact();
             ChangeToEdit(true);
         }
         private void contactList_MenuItemEdit_Click(object sender, EventArgs e)
         {
-            ChangeToEdit(true);
+            if (contactList.SelectedIndex != -1) ChangeToEdit(true);
         }
         private void contactList_MenuItemDelete_Click(object sender, EventArgs e)
         {
@@ -84,22 +96,51 @@ namespace PhoneBook
 
         private void contactList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var currentContact = contacts[contactList.SelectedIndex];
-            var contactInfo = db.GetContactInfo(currentContact.Id);
-            firsNameTextBox.Text = contactInfo["FirstName"];
-            lastNameTextBox.Text = contactInfo["LastName"];
-            phoneNumberTextBox.Text = contactInfo["PhoneNumber"];
-            emailAddressTextBox.Text = contactInfo["EmailAddress"];
-            companyTextBox.Text = contactInfo["Company"];
-            favouriteCheckBox.IsChecked = currentContact.Favourite;
-            if (currentContact.Icon != null) displayIcon.Fill = Utils.ConvertImage(currentContact.Icon);
-            else displayIcon.Fill = Utils.ConvertImage("images/default_icon.png");
+            if (contactList.SelectedIndex != -1)
+            {            
+                var contactInfo = db.GetContactInfo(CurrentContact.Id);
+                firsNameTextBox.Text = contactInfo["FirstName"];
+                lastNameTextBox.Text = contactInfo["LastName"];
+                phoneNumberTextBox.Text = contactInfo["PhoneNumber"];
+                emailAddressTextBox.Text = contactInfo["EmailAddress"];
+                companyTextBox.Text = contactInfo["Company"];
+                favouriteCheckBox.IsChecked = CurrentContact.Favourite;
+                if (CurrentContact.Icon != null) displayIcon.Fill = Utils.ImageToImageBrush(CurrentContact.Icon);
+                else displayIcon.Fill = Utils.ImageToImageBrush("images/default_icon.png");
+            }
+            else
+            {
+                firsNameTextBox.Text = "";
+                lastNameTextBox.Text = "";
+                phoneNumberTextBox.Text = "";
+                emailAddressTextBox.Text = "";
+                companyTextBox.Text = "";
+                favouriteCheckBox.IsChecked = false;
+                displayIcon.Fill = Utils.ImageToImageBrush("images/default_icon.png");
+            }
         }
 
         private void acceptButton_Click(object sender, RoutedEventArgs e)
         {
-            ChangeToEdit(false);
+            if (contactList.SelectedIndex != -1) db.UpdateContact(
+                CurrentContact.Id,
+                firsNameTextBox.Text,
+                lastNameTextBox.Text,
+                phoneNumberTextBox.Text,
+                emailAddressTextBox.Text,
+                companyTextBox.Text,
+                CurrentContact.Icon,
+                CurrentContact.Favourite);
+            else db.AddContact(
+                firsNameTextBox.Text,
+                lastNameTextBox.Text,
+                phoneNumberTextBox.Text,
+                emailAddressTextBox.Text,
+                companyTextBox.Text,
+                CurrentContact.Icon,
+                favouriteCheckBox.IsChecked ?? false);
 
+            ChangeToEdit(false);
         }
     }
 }

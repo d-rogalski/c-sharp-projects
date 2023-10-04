@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PhoneBook"
         mc:Ignorable="d"
-        Title="PhoneBook" Height="450" Width="480" Loaded="mainWindow_Loaded" ResizeMode="NoResize">
-    <Grid Margin="0,0,0,-6" Width="480">
+        Title="PhoneBook" Height="480" Width="480" Loaded="mainWindow_Loaded" ResizeMode="NoResize">
+    <Grid Margin="0,0,0,-6" Width="480" Height="450">
         <Label Content="First name:" HorizontalAlignment="Left" Margin="208,140,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="firsNameTextBox" HorizontalAlignment="Left" Margin="240,166,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
         <Label Content="Last name:" HorizontalAlignment="Center" Margin="0,190,0,0" VerticalAlignment="Top"/>
@@ -17,7 +17,7 @@
         <TextBox x:Name="emailAddressTextBox" HorizontalAlignment="Left" Margin="240,313,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
         <Label Content="Company:" HorizontalAlignment="Center" Margin="0,336,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="companyTextBox" HorizontalAlignment="Left" Margin="240,362,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
-        <ListView x:Name="contactList" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,33,290,10" SelectionChanged="contactList_SelectionChanged">
+        <ListView x:Name="contactList" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,33,0,0" SelectionChanged="contactList_SelectionChanged" Height="400" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
             <ListView.View>
                 <GridView>
                     <GridView.ColumnHeaderContainerStyle>
@@ -72,6 +72,6 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button x:Name="acceptButton" Content="Accept" HorizontalAlignment="Left" Margin="340,407,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.052" Width="100" Height="23" Click="acceptButton_Click"/>
+        <Button x:Name="acceptButton" Content="Accept" Margin="290,407,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.052" Width="100" Height="23" Click="acceptButton_Click" HorizontalAlignment="Left"/>
     </Grid>
 </Window>
