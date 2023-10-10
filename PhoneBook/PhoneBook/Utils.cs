@@ -11,6 +11,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Interop;
+using System.Collections.Immutable;
 
 namespace PhoneBook
 {
@@ -38,6 +39,15 @@ namespace PhoneBook
             ImageConverter imgConv = new ImageConverter();
             byte[] bytes = (byte[])imgConv.ConvertTo(img, typeof(byte[]));
             return bytes;
+        }
+    }
+    public static class Extensions
+    {
+        public static T[] SubArray<T>(this T[] array, int index, int length)
+        {
+            T[] res = new T[length];
+            Array.Copy(array, index, res, 0, length);
+            return res;
         }
     }
 }

@@ -48,9 +48,10 @@ namespace PhoneBook
             emailAddressTextBox.IsEnabled = value;
             companyTextBox.IsEnabled = value;
             favouriteCheckBox.IsEnabled = value;
-            displayIcon.IsEnabled = value;
             contactList.IsEnabled = !value;
             acceptButton.Visibility = value ? Visibility.Visible : Visibility.Hidden;
+            cancelButton.Visibility = value ? Visibility.Visible : Visibility.Hidden;
+            editIcon.Visibility = value ? Visibility.Visible : Visibility.Hidden;
 
             _editable = value;
         }
@@ -80,7 +81,11 @@ namespace PhoneBook
         }
         private void contactList_MenuItemDelete_Click(object sender, EventArgs e)
         {
-
+            if (contactList.SelectedIndex != -1)
+            {
+                db.DeleteContact(CurrentContact.Id);
+                RefreshContacts();
+            }
         }
 
         private void RefreshContacts()
@@ -141,6 +146,28 @@ namespace PhoneBook
                 favouriteCheckBox.IsChecked ?? false);
 
             ChangeToEdit(false);
+            RefreshContacts();
+        }
+
+        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeToEdit(false);
+            RefreshContacts();
+        }
+
+        private void editIcon_MouseEnter(object sender, MouseEventArgs e)
+        {
+            editIcon.Fill.Opacity = 0.5;
+        }
+
+        private void editIcon_MouseLeave(object sender, MouseEventArgs e)
+        {
+            editIcon.Fill.Opacity = 1.0;
+        }
+
+        private void editIcon_MouseMove(object sender, MouseEventArgs e)
+        {
+            editIcon.Fill.Opacity = 0.5;
         }
     }
 }
