@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Identity.Client;
 using System.Configuration;
+using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace PhoneBook
 {
@@ -110,8 +112,7 @@ namespace PhoneBook
                 emailAddressTextBox.Text = contactInfo["EmailAddress"];
                 companyTextBox.Text = contactInfo["Company"];
                 favouriteCheckBox.IsChecked = CurrentContact.Favourite;
-                if (CurrentContact.Icon != null) displayIcon.Fill = Utils.ImageToImageBrush(CurrentContact.Icon);
-                else displayIcon.Fill = Utils.ImageToImageBrush("images/default_icon.png");
+                displayIcon.Fill = CurrentContact.IconBrush;
             }
             else
             {
@@ -155,19 +156,22 @@ namespace PhoneBook
             RefreshContacts();
         }
 
-        private void editIcon_MouseEnter(object sender, MouseEventArgs e)
+        private void editIcon_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            editIcon.Fill.Opacity = 0.5;
-        }
-
-        private void editIcon_MouseLeave(object sender, MouseEventArgs e)
-        {
-            editIcon.Fill.Opacity = 1.0;
-        }
-
-        private void editIcon_MouseMove(object sender, MouseEventArgs e)
-        {
-            editIcon.Fill.Opacity = 0.5;
+            var fileDialog = new OpenFileDialog()
+            {
+                Multiselect = false,
+                AddExtension = true,
+                InitialDirectory = Environment.SpecialFolder.MyPictures.ToString(),
+                Filter = "Image Files(*.BMP;*.JPG;*.PNG)|*.BMP;*.JPG;*.PNG",
+                FilterIndex = 0
+            };
+            if (fileDialog.ShowDialog() ?? false)
+            {
+                Debug.WriteLine(fileDialog.FileName);
+                CurrentContact.SetIcon(fileDialog.FileName);
+                displayIcon.Fill = CurrentContact.IconBrush;
+            }
         }
     }
 }

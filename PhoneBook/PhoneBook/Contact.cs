@@ -6,16 +6,36 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Windows.Media.Imaging;
+using System.Windows.Interop;
+using System.Windows;
+using Microsoft.Identity.Client;
+using System.Windows.Media;
 
 namespace PhoneBook
 {
     public class Contact
     {
         public int Id { get; }
-        public Image? Icon { get; set; }
+        public byte[]? Icon { get; set; }
+        public ImageBrush IconBrush
+        { 
+            get
+            {
+                if (Icon == null) return Utils.ImageToImageBrush("images/default_icon.png");
+                else return Utils.ImageToImageBrush(Icon);
+            } 
+        }
+        public ImageSource IconSource
+        {
+            get
+            {
+                if (Icon == null) return Utils.ImageToImageSource("images/default_icon.png");
+                else return Utils.ImageToImageSource(Icon);
+            }
+        }
         public string DisplayName { get; }
         public bool Favourite { get; }
-
         public Contact() 
         {
             Id = -1;
@@ -29,10 +49,18 @@ namespace PhoneBook
             DisplayName = (string)objects[1];
 
             Utils.LoadSafely(objects[2], out byte[]? bytes);
-            Icon = bytes != null ? Image.FromStream(new MemoryStream(bytes)) : null;
+            Icon = bytes;
 
             Utils.LoadSafely(objects[3], out bool tmp);
             Favourite = tmp;
+        }
+        public void SetIcon(string filePath)
+        {
+            using (var fs = new FileStream(filePath, FileMode.Open))
+            {
+                Icon = new byte[fs.Length];
+                fs.Read(Icon);
+            }        
         }
     }
 }

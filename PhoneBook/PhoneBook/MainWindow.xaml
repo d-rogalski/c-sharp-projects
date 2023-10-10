@@ -7,17 +7,21 @@
         mc:Ignorable="d"
         Title="PhoneBook" Height="480" Width="480" Loaded="mainWindow_Loaded" ResizeMode="NoResize">
     <Grid Margin="0,0,0,-6" Width="480" Height="450">
-        <Label Content="First name:" HorizontalAlignment="Left" Margin="208,140,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="firsNameTextBox" HorizontalAlignment="Left" Margin="240,166,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
-        <Label Content="Last name:" HorizontalAlignment="Center" Margin="0,190,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="lastNameTextBox" HorizontalAlignment="Left" Margin="240,215,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
-        <Label Content="Phone number:" HorizontalAlignment="Left" Margin="208,238,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="phoneNumberTextBox" HorizontalAlignment="Left" Margin="240,264,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
-        <Label Content="Email address:" HorizontalAlignment="Left" Margin="208,287,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="emailAddressTextBox" HorizontalAlignment="Left" Margin="240,313,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
-        <Label Content="Company:" HorizontalAlignment="Center" Margin="0,336,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="companyTextBox" HorizontalAlignment="Left" Margin="240,362,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
-        <ListView x:Name="contactList" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,33,0,0" SelectionChanged="contactList_SelectionChanged" Height="400" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Cursor="Hand">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="First name:" HorizontalAlignment="Left" Margin="208,140,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="firsNameTextBox" HorizontalAlignment="Left" Margin="240,166,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" Grid.ColumnSpan="2"/>
+        <Label Content="Last name:" HorizontalAlignment="Center" Margin="0,190,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="lastNameTextBox" HorizontalAlignment="Left" Margin="240,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="200" Grid.ColumnSpan="2"/>
+        <Label Content="Phone number:" HorizontalAlignment="Left" Margin="208,238,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="phoneNumberTextBox" HorizontalAlignment="Left" Margin="240,264,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" Grid.ColumnSpan="2"/>
+        <Label Content="Email address:" HorizontalAlignment="Left" Margin="208,287,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="emailAddressTextBox" HorizontalAlignment="Left" Margin="240,313,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" Grid.ColumnSpan="2"/>
+        <Label Content="Company:" HorizontalAlignment="Center" Margin="0,336,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="companyTextBox" HorizontalAlignment="Left" Margin="240,362,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" Grid.ColumnSpan="2"/>
+        <ListView x:Name="contactList" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,33,0,0" SelectionChanged="contactList_SelectionChanged" Height="400" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Cursor="Hand" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
                     <GridView.ColumnHeaderContainerStyle>
@@ -29,7 +33,11 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" MaxWidth="50" MinWidth="50">
-                                    <Image Width="32" Height="32" Source="images/default_icon.png"/>
+                                    <Ellipse Width="32" Height="32">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding IconSource}" Stretch="Fill"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -53,12 +61,12 @@
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <Ellipse x:Name="displayIcon" Height="128" Stroke="Black" Width="128" Margin="276,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StrokeThickness="2" IsEnabled="False">
+        <Ellipse x:Name="displayIcon" Height="128" Stroke="Black" Width="128" Margin="276,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StrokeThickness="2" IsEnabled="False" Grid.ColumnSpan="2">
             <Ellipse.Fill>
                 <ImageBrush x:Name="displayIconImg"  ImageSource="images/default_icon.png" Stretch="Fill" Opacity="1"/>
             </Ellipse.Fill>
         </Ellipse>
-        <Ellipse x:Name="editIcon" Height="32" Stroke="Black" Width="32" Margin="372,106,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StrokeThickness="2" IsEnabled="True" Cursor="Hand">
+        <Ellipse x:Name="editIcon" Height="32" Stroke="Black" Width="32" Margin="372,106,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StrokeThickness="2" IsEnabled="True" Cursor="Hand" Grid.ColumnSpan="2" MouseDown="editIcon_MouseDown">
             <Ellipse.Fill>
                 <ImageBrush x:Name="editIconImg"  ImageSource="images/edit_icon.png" Stretch="Fill"/>
             </Ellipse.Fill>
@@ -73,9 +81,9 @@
                 </Style>
             </Ellipse.Style>
         </Ellipse>
-        <CheckBox x:Name="favouriteCheckBox" Content="Favourite" HorizontalAlignment="Left" Margin="208,385,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="searchTextBox" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" TextChanged="searchTextBox_TextChanged"/>
-        <TextBlock IsHitTestVisible="False" Text="Search..." HorizontalAlignment="Left" Margin="10,10,0,412" Padding="3, 1, 0, 0" Foreground="DarkGray">
+        <CheckBox x:Name="favouriteCheckBox" Content="Favourite" HorizontalAlignment="Left" Margin="208,385,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="searchTextBox" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" TextChanged="searchTextBox_TextChanged" Grid.ColumnSpan="2"/>
+        <TextBlock IsHitTestVisible="False" Text="Search..." HorizontalAlignment="Left" Margin="10,10,0,412" Padding="3, 1, 0, 0" Foreground="DarkGray" Grid.ColumnSpan="2">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -87,7 +95,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button x:Name="acceptButton" Content="Accept" Margin="350,407,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.052" Width="80" Height="23" Click="acceptButton_Click" HorizontalAlignment="Left" Cursor="Hand"/>
-        <Button x:Name="cancelButton" Content="Cancel" Margin="250,407,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.052" Width="80" Height="23" Click="cancelButton_Click" HorizontalAlignment="Left" Cursor="Hand"/>
+        <Button x:Name="acceptButton" Content="Accept" Margin="350,407,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.052" Width="80" Height="23" Click="acceptButton_Click" HorizontalAlignment="Left" Cursor="Hand" Grid.ColumnSpan="2"/>
+        <Button x:Name="cancelButton" Content="Cancel" Margin="250,407,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.052" Width="80" Height="23" Click="cancelButton_Click" HorizontalAlignment="Left" Cursor="Hand" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

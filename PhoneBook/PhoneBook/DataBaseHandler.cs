@@ -82,7 +82,7 @@ namespace PhoneBook
             return result;
         }
 
-        public (int, int) UpdateContact(int id, string firstName, string lastName, string phoneNumber, string emailAddress, string company, Image icon, bool favourite)
+        public (int, int) UpdateContact(int id, string firstName, string lastName, string phoneNumber, string emailAddress, string company, byte[]? icon, bool favourite)
         {
             SqlParameter[] parameters;
             
@@ -108,13 +108,13 @@ namespace PhoneBook
             parameters[0] = new SqlParameter("@id", SqlDbType.Int);
             parameters[0].Value = id;
             parameters[1] = new SqlParameter("@i", SqlDbType.Image);
-            parameters[1].Value = icon == null ? DBNull.Value : Utils.ImageToBytes(icon);
+            parameters[1].Value = icon == null ? DBNull.Value : icon;
 
             int res2 = (int)ExecuteProcedure("UpdateContactIcon", parameters);
 
             return (res1, res2);
         }
-        public int AddContact(string firstName, string lastName, string phoneNumber, string emailAddress, string company, Image? icon, bool favourite)
+        public int AddContact(string firstName, string lastName, string phoneNumber, string emailAddress, string company, byte[]? icon, bool favourite)
         {
             SqlParameter[] parameters = new SqlParameter[fieldNames.Length - 1];
             parameters[0] = new SqlParameter("@fn", SqlDbType.VarChar);
@@ -128,7 +128,7 @@ namespace PhoneBook
             parameters[4] = new SqlParameter("@c", SqlDbType.VarChar);
             parameters[4].Value = company;
             parameters[5] = new SqlParameter("@i", SqlDbType.Image);
-            parameters[5].Value = icon == null ? DBNull.Value : Utils.ImageToBytes(icon);
+            parameters[5].Value = icon == null ? DBNull.Value : icon;
             parameters[6] = new SqlParameter("@f", SqlDbType.Bit);
             parameters[6].Value = favourite ? 1 : 0;
 
@@ -137,7 +137,7 @@ namespace PhoneBook
         public void DeleteContact(int id)
         {
             string query = $"DELETE FROM Contact WHERE Id = {id};";
-            ExecuteQuery(query);
+            using var reader = ExecuteQuery(query);
         }
     }
 }

@@ -12,6 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Interop;
 using System.Collections.Immutable;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Windows.Media.Media3D;
+using System.IO;
 
 namespace PhoneBook
 {
@@ -22,9 +26,30 @@ namespace PhoneBook
             if (DBNull.Value.Equals(obj)) result = default;
             else result = (T)obj;
         }
+        public static ImageSource ImageToImageSource(byte[] img)
+        {
+            var bitmap = new Bitmap(Image.FromStream(new MemoryStream(img)));
+            var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            bitmap.Dispose();
+            return bitmapSource;
+        }
+        public static ImageSource ImageToImageSource(string filePath)
+        {
+            var bitmap = new Bitmap(Image.FromFile(filePath));
+            var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            bitmap.Dispose();
+            return bitmapSource;
+        }
         public static ImageBrush ImageToImageBrush(Image img)
         {
             var bitmap = new System.Drawing.Bitmap(img);
+            var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            bitmap.Dispose();
+            return new ImageBrush(bitmapSource);
+        }
+        public static ImageBrush ImageToImageBrush(byte[] img)
+        {
+            var bitmap = new Bitmap(Image.FromStream(new MemoryStream(img)));
             var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             bitmap.Dispose();
             return new ImageBrush(bitmapSource);
