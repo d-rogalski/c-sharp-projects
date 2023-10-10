@@ -44,11 +44,11 @@ namespace PhoneBook
         private Contact _newContact;
         private void ChangeToEdit(bool value)
         {
-            firsNameTextBox.IsEnabled = value;
-            lastNameTextBox.IsEnabled = value;
-            phoneNumberTextBox.IsEnabled = value;
-            emailAddressTextBox.IsEnabled = value;
-            companyTextBox.IsEnabled = value;
+            firsNameTextBox.IsReadOnly = !value;
+            lastNameTextBox.IsReadOnly = !value;
+            phoneNumberTextBox.IsReadOnly = !value;
+            emailAddressTextBox.IsReadOnly = !value;
+            companyTextBox.IsReadOnly = !value;
             favouriteCheckBox.IsEnabled = value;
             contactList.IsEnabled = !value;
             acceptButton.Visibility = value ? Visibility.Visible : Visibility.Hidden;
@@ -90,10 +90,11 @@ namespace PhoneBook
             }
         }
 
-        private void RefreshContacts()
+        private void RefreshContacts(int index=-1)
         {
             contacts = db.ExtractContacts(searchTextBox.Text);
             contactList.ItemsSource = contacts;
+            contactList.SelectedIndex = index;
         }
 
         private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -128,26 +129,33 @@ namespace PhoneBook
 
         private void acceptButton_Click(object sender, RoutedEventArgs e)
         {
-            if (contactList.SelectedIndex != -1) db.UpdateContact(
-                CurrentContact.Id,
-                firsNameTextBox.Text,
-                lastNameTextBox.Text,
-                phoneNumberTextBox.Text,
-                emailAddressTextBox.Text,
-                companyTextBox.Text,
-                CurrentContact.Icon,
-                CurrentContact.Favourite);
-            else db.AddContact(
-                firsNameTextBox.Text,
-                lastNameTextBox.Text,
-                phoneNumberTextBox.Text,
-                emailAddressTextBox.Text,
-                companyTextBox.Text,
-                CurrentContact.Icon,
-                favouriteCheckBox.IsChecked ?? false);
-
+            if (contactList.SelectedIndex != -1)
+            {
+                db.UpdateContact(
+                    CurrentContact.Id,
+                    firsNameTextBox.Text,
+                    lastNameTextBox.Text,
+                    phoneNumberTextBox.Text,
+                    emailAddressTextBox.Text,
+                    companyTextBox.Text,
+                    CurrentContact.Icon,
+                    CurrentContact.Favourite
+                    );
+            }
+            else
+            {
+                db.AddContact(
+                    firsNameTextBox.Text,
+                    lastNameTextBox.Text,
+                    phoneNumberTextBox.Text,
+                    emailAddressTextBox.Text,
+                    companyTextBox.Text,
+                    CurrentContact.Icon,
+                    favouriteCheckBox.IsChecked ?? false
+                    );
+            }
             ChangeToEdit(false);
-            RefreshContacts();
+            RefreshContacts(contactList.SelectedIndex);
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
