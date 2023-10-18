@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="default_icon.png" />
     <None Remove="images\edit_icon.png" />
+    <None Remove="images\remove_icon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,13 @@
     <Content Include="images\edit_icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\remove_icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="logs\" />
   </ItemGroup>
 
 </Project>

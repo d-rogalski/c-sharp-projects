@@ -14,7 +14,7 @@ using System.Security.Cryptography;
 
 namespace PhoneBook
 {
-    internal class DataBaseHandler
+    internal class DataBaseHandler : IDisposable
     {
         private SqlConnection cnn;
         private string[] fieldNames = new string[] { "Id", "FirstName", "LastName", "PhoneNumber", "EmailAddress", "Company", "Icon", "Favourite" };
@@ -24,8 +24,9 @@ namespace PhoneBook
             cnn = new SqlConnection(connectionString);
             cnn.Open();
         }
-        ~DataBaseHandler()
+        public void Dispose()
         {
+            cnn.Dispose();
             cnn.Close();
         }
         private SqlDataReader ExecuteQuery(string query)

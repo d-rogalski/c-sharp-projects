@@ -59,12 +59,6 @@ namespace PhoneBook
             var img = Image.FromFile(path);
             return ImageToImageBrush(img);
         }
-        public static byte[] ImageToBytes(Image img)
-        {
-            ImageConverter imgConv = new ImageConverter();
-            byte[] bytes = (byte[])imgConv.ConvertTo(img, typeof(byte[]));
-            return bytes;
-        }
     }
     public static class Extensions
     {
@@ -74,5 +68,11 @@ namespace PhoneBook
             Array.Copy(array, index, res, 0, length);
             return res;
         }
+    }
+    public class ClosingException : Exception
+    {
+        public ClosingException() { }
+        public ClosingException(string message) : base(message) { }
+        public ClosingException(string message, Exception inner) : base(message, inner) { }
     }
 }

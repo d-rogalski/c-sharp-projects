@@ -16,7 +16,7 @@ namespace PhoneBook
 {
     public class Contact
     {
-        public int Id { get; }
+        public int Id { get; set; }
         public byte[]? Icon { get; set; }
         public ImageBrush IconBrush
         { 
@@ -53,6 +53,10 @@ namespace PhoneBook
 
             Utils.LoadSafely(objects[3], out bool tmp);
             Favourite = tmp;
+        }
+        public override string ToString()
+        {
+            return $"{DisplayName} (Id: {Id})";
         }
         public void SetIcon(string filePath)
         {
