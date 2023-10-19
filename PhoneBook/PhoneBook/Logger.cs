@@ -60,9 +60,9 @@ namespace PhoneBook
 
                 Log("Logger instantiated.", "Logger");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new ClosingException("Failed to initaite Logger", e);
+                throw new ClosingException("Failed to initaite Logger", ex);
             }
         }
 

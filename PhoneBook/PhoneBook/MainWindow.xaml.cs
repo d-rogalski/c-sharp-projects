@@ -45,7 +45,7 @@ namespace PhoneBook
         /// <summary>
         /// <c>DataBaseHandler</c> object for easier operations with the data base.
         /// </summary>
-        private DataBaseHandler db;
+        private PhoneBookDatabase db;
 
         /// <summary>
         /// List of contacts stored as the <c>Contact</c> objects. It is a Items source of the ListView control.
@@ -95,7 +95,7 @@ namespace PhoneBook
 
             // Connecting to the database
             (res, msg) = TryWithMessageBox(
-                () => db = new DataBaseHandler(sqlConnectionString), 
+                () => db = new PhoneBookDatabase(sqlConnectionString), 
                 "Failed to connect with the data base. The app will be closed.");
             if (res < 0)
             {
@@ -201,15 +201,27 @@ namespace PhoneBook
         {
             // If there is no selection, import the selected contact and display it
             if (contactList.SelectedIndex != -1)
-            {            
-                var contactInfo = db.GetContactInfo(CurrentContact.Id);
-                firsNameTextBox.Text = contactInfo["FirstName"];
-                lastNameTextBox.Text = contactInfo["LastName"];
-                phoneNumberTextBox.Text = contactInfo["PhoneNumber"];
-                emailAddressTextBox.Text = contactInfo["EmailAddress"];
-                companyTextBox.Text = contactInfo["Company"];
-                favouriteCheckBox.IsChecked = CurrentContact.Favourite;
-                displayIcon.Fill = CurrentContact.IconBrush;
+            {           
+                try
+                {
+                    var contactInfo = db.GetContactInfo(CurrentContact.Id);
+                    firsNameTextBox.Text = contactInfo["FirstName"];
+                    lastNameTextBox.Text = contactInfo["LastName"];
+                    phoneNumberTextBox.Text = contactInfo["PhoneNumber"];
+                    emailAddressTextBox.Text = contactInfo["EmailAddress"];
+                    companyTextBox.Text = contactInfo["Company"];
+                    favouriteCheckBox.IsChecked = CurrentContact.Favourite;
+                    displayIcon.Fill = CurrentContact.IconBrush;
+                }
+                catch (Exception ex)
+                {
+                    string log = $"Refreshing the contacts failed due to the following exception {ex}. ";
+                    if (ex.InnerException == null)
+                    {
+                        log += $"Inner exception: {ex.InnerException}";
+                    }
+                    logger.Log(log, "Database");
+                }
             }
             // Otherwise clean the contact form
             else
@@ -335,8 +347,14 @@ namespace PhoneBook
             };
             if (fileDialog.ShowDialog() ?? false)
             {
-                CurrentContact.SetIcon(fileDialog.FileName); // Add the icon to Contact info
-                displayIcon.Fill = CurrentContact.IconBrush; // Displayu the icon
+                (int res, string msg) = TryWithMessageBox(
+                    () =>
+                    {
+                        CurrentContact.SetIcon(fileDialog.FileName); // Add the icon to Contact info
+                        displayIcon.Fill = CurrentContact.IconBrush; // Display the icon
+                    },
+                    "Failed to load the icon.");
+                if (res < 0) logger.Log($"Failed to load the icon from {fileDialog.FileName} due to the following exception: {msg}", "FileDialog");
             }
         }
 
@@ -349,7 +367,7 @@ namespace PhoneBook
         {
             if (CurrentContact.Icon != null)
             {
-                CurrentContact.Icon = null;
+                CurrentContact.RemoveIcon();
                 displayIcon.Fill = Utils.ImageToImageBrush("images/default_icon.png");
             }
         }
@@ -363,9 +381,20 @@ namespace PhoneBook
         /// <param name="index">Index of the contact to be selected after refrreshing. Default - no selection.</param>
         private void RefreshContacts(int index = -1)
         {
-            contacts = db.ExtractContacts(searchTextBox.Text);
-            contactList.ItemsSource = contacts;
-            contactList.SelectedIndex = index;
+            try
+            {
+                contacts = db.ExtractContacts(searchTextBox.Text);
+                contactList.ItemsSource = contacts;
+                contactList.SelectedIndex = index;
+            }
+            catch (Exception ex)
+            {
+                string log = $"Refreshing the contacts failed due to the following exception {ex}. ";
+                if (ex.InnerException == null) {
+                    log += $"Inner exception: {ex.InnerException}";
+                }
+                logger.Log(log, "Database");
+            }          
         }
 
         /// <summary>
@@ -407,16 +436,16 @@ namespace PhoneBook
                 if (messageIfSuccess != null) MessageBox.Show(messageIfSuccess, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 return (0, "");
             }
-            catch (ClosingException e)
+            catch (ClosingException ex)
             {
-                string exceptionMessage = (e.InnerException ?? e).ToString();
+                string exceptionMessage = (ex.InnerException ?? ex).ToString();
                 MessageBox.Show(messageIfFailed + "\n" + exceptionMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return (-1, exceptionMessage);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 MessageBox.Show(messageIfFailed, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return (-2, e.ToString());
+                return (-2, ex.ToString());
             }
         }
 
