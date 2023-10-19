@@ -41,6 +41,7 @@ The application requires a dedicated MSSQL database PhoneBook with stored proced
 - Company (`varchar`)
 - Icon (`image`)
 - Favourite (`bit`)
+  
 The repository contains codes necessary to create such a database.
 
 In the application you can display, add, edit and delete the contacts in the database using a simple form. All the contacts are displayed in a list with their icon and name, in the alphabetic order, first favourite contactes then the others. You can filter the list by contact's name dynamically using a dedicated search box. 
