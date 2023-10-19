@@ -3,9 +3,9 @@ This repository contains several .NET/C# projects written as a way to improve co
 Ideas for the projects were taken from [here](https://dev.to/nerdjfpb/15-c-project-ideas-beginner-to-expert-with-tutorial-iio).
 
 ### List of the projects
-- [Number Guessing Game](README.md#number-guessing-app)
-- [Notebook App](Readme.md#notebook-app)
-- [Phone Book App](PhoneBook)
+- Number Guessing Game
+- Notebook App
+- Phone Book App
 - Tic-Tac-Toe Game
 
 ## Description of the projects
@@ -18,3 +18,6 @@ The game has 5 difficulty levels differing in the range of numbers to guess, so 
 - `DoInRobust` method that invokes an action until no exception is met. It was used to ensure proper user's input.
 
 ### [Notebook App](NoteApp)
+
+
+### [Phone Book App](PhoneBook)
