@@ -4,7 +4,7 @@ Ideas for the projects were taken from [here](https://dev.to/nerdjfpb/15-c-proje
 
 ### List of the projects
 - [Number Guessing Game](README.md#number-guessing-app)
-- [Notebook App](Readme.md#Note)
+- [Notebook App](Readme.md#notebook-app)
 - [Phone Book App](PhoneBook)
 - Tic-Tac-Toe Game
 
