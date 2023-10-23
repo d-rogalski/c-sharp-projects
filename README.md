@@ -32,7 +32,7 @@ You can read, add, edit and delete notes with titles and creation date. The note
 ### [Phone Book App](PhoneBook)
 A WPF application that serbes as a phone book with detailed contacts.
 
-The application requires a dedicated MSSQL database PhoneBook with stored procedures `AddContact`, `UpdateContact` and `UpdateContactIcon`, and a single entity Contact containing the follwoing fields:
+The application requires a dedicated MSSQL database PhoneBook with stored procedures `AddContact`, `UpdateContact` and `UpdateContactIcon`, and a single entity, Contact, containing the following fields:
 - Id (`int`) - primary key
 - FirstName (`varchar`)
 - LastName (`varchar`)
