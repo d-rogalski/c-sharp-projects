@@ -13,18 +13,30 @@
                 <GradientStop Color="#FF0084FF" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="280" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="420" />
+        </Grid.RowDefinitions>
 
-        <Label Content="First name:" HorizontalAlignment="Left" Margin="208,140,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="firsNameTextBox" HorizontalAlignment="Left" Margin="240,166,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" Grid.ColumnSpan="3"/>
-        <Label Content="Last name:" HorizontalAlignment="Left" Margin="207,190,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="lastNameTextBox" HorizontalAlignment="Left" Margin="240,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="200" Grid.ColumnSpan="3"/>
-        <Label Content="Phone number:" HorizontalAlignment="Left" Margin="208,238,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="phoneNumberTextBox" HorizontalAlignment="Left" Margin="240,264,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" Grid.ColumnSpan="3"/>
-        <Label Content="Email address:" HorizontalAlignment="Left" Margin="208,287,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="emailAddressTextBox" HorizontalAlignment="Left" Margin="240,313,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" Grid.ColumnSpan="3"/>
-        <Label Content="Company:" HorizontalAlignment="Left" Margin="208,336,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="companyTextBox" HorizontalAlignment="Left" Margin="240,362,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" Grid.ColumnSpan="3"/>
-        <ListView x:Name="contactList" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,33,0,0" SelectionChanged="contactList_SelectionChanged" Height="400" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.ColumnSpan="2">
+        <TextBox x:Name="searchTextBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="" Width="180" TextChanged="searchTextBox_TextChanged"/>
+        <TextBlock IsHitTestVisible="False" Text="Search..." Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="3, 0, 0, 0" Foreground="DarkGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=searchTextBox}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        
+        <ListView x:Name="contactList" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="contactList_SelectionChanged" Height="400" Width="180" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
             <ListView.View>
                 <GridView>
                     <GridView.ColumnHeaderContainerStyle>
@@ -64,56 +76,68 @@
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <Ellipse x:Name="displayIcon" Height="128" Stroke="Black" Width="128" Margin="276,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StrokeThickness="2" IsEnabled="False" Grid.ColumnSpan="3">
-            <Ellipse.Fill>
-                <ImageBrush x:Name="displayIconImg"  ImageSource="images/default_icon.png" Stretch="Fill" Opacity="1"/>
-            </Ellipse.Fill>
-        </Ellipse>
-        <Ellipse x:Name="editIcon" Height="32" Stroke="Black" Width="32" Margin="372,106,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StrokeThickness="2" IsEnabled="True" Cursor="Hand" MouseDown="editIcon_MouseDown">
-            <Ellipse.Fill>
-                <ImageBrush x:Name="editIconImg"  ImageSource="images/edit_icon.png" Stretch="Fill"/>
-            </Ellipse.Fill>
-            <Ellipse.Style>
-                <Style TargetType="{x:Type Ellipse}">
-                    <Setter Property="Opacity" Value="1.0"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.75"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Ellipse.Style>
-        </Ellipse>
-        <Ellipse x:Name="removeIcon" Height="32" Stroke="Black" Width="32" Margin="276,106,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StrokeThickness="2" IsEnabled="True" Cursor="Hand" Grid.ColumnSpan="2" MouseDown="removeIcon_MouseDown">
-            <Ellipse.Fill>
-                <ImageBrush x:Name="removeIconImg"  ImageSource="images/remove_icon.png" Stretch="Fill" Opacity="1"/>
-            </Ellipse.Fill>
-            <Ellipse.Style>
-                <Style TargetType="{x:Type Ellipse}">
-                    <Setter Property="Opacity" Value="1.0"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.75"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Ellipse.Style>
-        </Ellipse>
-        <CheckBox x:Name="favouriteCheckBox" Content="Favourite" HorizontalAlignment="Left" Margin="208,385,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="searchTextBox" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" TextChanged="searchTextBox_TextChanged" Grid.ColumnSpan="2"/>
-        <TextBlock IsHitTestVisible="False" Text="Search..." HorizontalAlignment="Left" Margin="10,10,0,412" Padding="3, 1, 0, 0" Foreground="DarkGray" Grid.ColumnSpan="2">
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Text, ElementName=searchTextBox}" Value="">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-        <Button x:Name="acceptButton" Content="Accept" Margin="348,407,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.052" Width="80" Height="23" Click="acceptButton_Click" HorizontalAlignment="Left" Cursor="Hand"/>
-        <Button x:Name="cancelButton" Content="Cancel" Margin="252,407,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,0.052" Width="80" Height="23" Click="cancelButton_Click" HorizontalAlignment="Left" Cursor="Hand"/>
+
+        <Grid Grid.Column="1" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Ellipse x:Name="displayIcon" Height="128" Grid.Row="0" Stroke="Black" Width="128" HorizontalAlignment="Center" VerticalAlignment="Center" StrokeThickness="2" IsEnabled="False">
+                <Ellipse.Fill>
+                    <ImageBrush x:Name="displayIconImg"  ImageSource="images/default_icon.png" Stretch="Fill" Opacity="1"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse x:Name="editIcon" Height="32" Grid.Row="0" Stroke="Black" Width="32" Margin="96,96,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" StrokeThickness="2" IsEnabled="True" Cursor="Hand" MouseDown="editIcon_MouseDown">
+                <Ellipse.Fill>
+                    <ImageBrush x:Name="editIconImg"  ImageSource="images/edit_icon.png" Stretch="Fill"/>
+                </Ellipse.Fill>
+                <Ellipse.Style>
+                    <Style TargetType="{x:Type Ellipse}">
+                        <Setter Property="Opacity" Value="1.0"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Ellipse.Style>
+            </Ellipse>
+            <Ellipse x:Name="removeIcon" Height="32" Grid.Row="0" Stroke="Black" Width="32" Margin="-96,96,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" StrokeThickness="2" IsEnabled="True" Cursor="Hand" MouseDown="removeIcon_MouseDown">
+                <Ellipse.Fill>
+                    <ImageBrush x:Name="removeIconImg"  ImageSource="images/remove_icon.png" Stretch="Fill" Opacity="1"/>
+                </Ellipse.Fill>
+                <Ellipse.Style>
+                    <Style TargetType="{x:Type Ellipse}">
+                        <Setter Property="Opacity" Value="1.0"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Ellipse.Style>
+            </Ellipse>
+
+            <Label Content="First name:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+            <TextBox x:Name="firsNameTextBox" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,15,0,0" TextWrapping="Wrap" Text="" Width="200"/>
+            <Label Content="Last name:" Grid.Row="2" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+            <TextBox x:Name="lastNameTextBox" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,15,0,0" TextWrapping="Wrap" Text="" Width="200"/>
+            <Label Content="Phone number:" Grid.Row="3" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+            <TextBox x:Name="phoneNumberTextBox" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,15,0,0" TextWrapping="Wrap" Text="" Width="200"/>
+            <Label Content="Email address:" Grid.Row="4" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+            <TextBox x:Name="emailAddressTextBox" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,15,0,0" TextWrapping="Wrap" Text="" Width="200"/>
+            <Label Content="Company:" Grid.Row="5" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+            <TextBox x:Name="companyTextBox" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,15,0,0" TextWrapping="Wrap" Text="" Width="200"/>
+
+            <CheckBox x:Name="favouriteCheckBox" Content="Favourite" Grid.Row="6" HorizontalAlignment="Left" Margin="10,5,0,0" />
+            <Button x:Name="acceptButton" Content="Accept" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" RenderTransformOrigin="0,0.052" Width="80" Height="23" Click="acceptButton_Click" Cursor="Hand"/>
+            <Button x:Name="cancelButton" Content="Cancel" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,16,0" RenderTransformOrigin="0,0.052" Width="80" Height="23" Click="cancelButton_Click" Cursor="Hand"/>
+        </Grid>
     </Grid>
 </Window>
