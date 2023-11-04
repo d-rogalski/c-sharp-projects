@@ -5,18 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NoteApp"
         mc:Ignorable="d"
-        Title="NoteApp" Height="450" Width="800" Closing="Window_Closing" Loaded="Window_Loaded">
-    <Grid x:Name="mainWindow">
-        <ListBox x:Name="noteList" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="642,47,10,10" SelectionChanged="noteList_SelectionChanged">
+        Title="NoteApp" Height="490" Width="820" Closing="Window_Closing" Loaded="Window_Loaded" ResizeMode="NoResize">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White" Offset="1"/>
+            <GradientStop Color="#FF007902" Offset="0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid x:Name="mainWindow" Height="450" Width="800">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="400" />
+        </Grid.RowDefinitions>
+
+        <ListBox x:Name="noteList" d:ItemsSource="{d:SampleData ItemCount=5}" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="1" Width="180" Height="380" SelectionChanged="noteList_SelectionChanged" >
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Delete" Click="noteList_MenuItemDelete_Click"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
-        <Button x:Name="addNoteButton" Content="New note" Margin="642,6,10,0" VerticalAlignment="Top" Height="32" Click="addNoteButton_Click" MaxWidth="148" ClipToBounds="True"/>
-        <TextBox x:Name="noteTitleTextBox" HorizontalAlignment="Left" Margin="10,17,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="410" FontStyle="Italic" TextChanged="noteTitleTextBox_TextChanged" FontSize="14"/>
-        <TextBox x:Name="noteTextBox" HorizontalAlignment="Left" Margin="10,47,0,10" TextWrapping="Wrap" Text="" Width="614" AutoWordSelection="True" AcceptsTab="True" AcceptsReturn="True" TextChanged="noteTextBox_TextChanged"/>
-        <TextBlock x:Name="noteDateTextBlock" HorizontalAlignment="Left" Margin="425,18,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="18" Width="199" FontSize="14"/>
+        <Button x:Name="addNoteButton" Content="New note" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" Width="100" Click="addNoteButton_Click"/>
+        <TextBox x:Name="noteTitleTextBox" Text="" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap" Width="390" Height="30" FontStyle="Italic" TextChanged="noteTitleTextBox_TextChanged" FontSize="14"/>
+        <TextBlock x:Name="noteDateTextBlock" Text="" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" TextWrapping="Wrap" Height="30" Width="180" FontSize="14"/>
+        <TextBox x:Name="noteTextBox" Text="" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Width="580" Height="380" AutoWordSelection="True" AcceptsTab="True" AcceptsReturn="True" TextChanged="noteTextBox_TextChanged"/>
     </Grid>
 </Window>

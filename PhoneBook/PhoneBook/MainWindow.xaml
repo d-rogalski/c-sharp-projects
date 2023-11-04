@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PhoneBook"
         mc:Ignorable="d"
-        Title="PhoneBook" Height="480" Width="480" ResizeMode="NoResize" Closing="mainWindow_Closing">
-    <Grid Margin="0,0,0,-6" Width="480" Height="450">
+        Title="PhoneBook" Height="520" Width="500" Closing="mainWindow_Closing" Top="0" Left="0">
+    <Grid >
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="#FF00F9FF"/>
@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
-            <RowDefinition Height="420" />
+            <RowDefinition Height="450" />
         </Grid.RowDefinitions>
 
         <TextBox x:Name="searchTextBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="" Width="180" TextChanged="searchTextBox_TextChanged"/>
@@ -36,7 +36,7 @@
             </TextBlock.Style>
         </TextBlock>
         
-        <ListView x:Name="contactList" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="contactList_SelectionChanged" Height="400" Width="180" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+        <ListView x:Name="contactList" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="contactList_SelectionChanged" Height="430" Width="180" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
             <ListView.View>
                 <GridView>
                     <GridView.ColumnHeaderContainerStyle>
