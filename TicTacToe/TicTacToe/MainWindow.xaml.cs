@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Printing;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,33 +22,101 @@ namespace TicTacToe
     /// </summary>
     public partial class MainWindow : Window
     {
-        private short _turn = 0;
         private ImageBrush _crossImage = Utils.ImageToImageBrush("images/cross.png");
         private ImageBrush _circleImage = Utils.ImageToImageBrush("images/circle.png");
-        public TicTacToeGame game;
+        private TicTacToeGame _game;
+        private bool _singlePlayer;
         public MainWindow()
         {
             InitializeComponent();
 
-            game = new TicTacToeGame();
+            ShowMenu();
         }
 
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Rectangle field = (Rectangle)sender;
-            if (game.MakeMove(int.Parse(field.Uid)))
+            if (_game.MakeMove(int.Parse(field.Uid)) >= 0)
             {
-                field.Fill = game.CurrentPlayer == TicTacToeGame.Field.Cross ? _circleImage : _crossImage;
+                field.Style = (Style)this.FindResource($"field{_game.Opponent}Style");
+                field.IsEnabled = false;
             }
-            Thread.Sleep(1000);
-            if (game.ComputerMove())
+
+            if (TestResult()) return;
+
+            if (_singlePlayer)
             {
-                field.Fill = game.CurrentPlayer == TicTacToeGame.Field.Cross ? _circleImage : _crossImage;
+                int res = _game.ComputerMove();
+                if (res >= 0)
+                {
+                    field = (Rectangle)this.FindName($"field{res}");
+                    field.Style = (Style)this.FindResource($"field{_game.Opponent}Style");
+                    field.IsEnabled = false;
+                }
             }
+
+            if (TestResult()) return;
+        }
+
+        private void ShowMenu(string gameResult="")
+        {
+            mainMenu.Visibility = Visibility.Visible;
+            gameSpace.IsEnabled = false;
+            gameBlur.Radius = 10;
+            menuResultTextBlock.Text = gameResult;
+        }
+
+        private void HideMenu()
+        {
+            mainMenu.Visibility = Visibility.Hidden;
+            gameSpace.IsEnabled = true;
+            gameBlur.Radius = 0;
+        }
+
+        private void ClearFields()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                Rectangle field = (Rectangle)this.FindName($"field{i}");
+                field.IsEnabled = true;
+                field.Style = (System.Windows.Style)this.FindResource("fieldStyle");
+            }
+        }
+
+        private bool TestResult()
+        {
+            var result = _game.IsGameOver();
+            if (result == null) return false;
+            else if (result == TicTacToeGame.Field.Empty) ShowMenu("It's a draw!");
+            else ShowMenu($"{result} wins!");
+            return true;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
+        }
+
+        private void menuSingleButton_Click(object sender, RoutedEventArgs e)
+        {
+            _game = new TicTacToeGame();
+            ClearFields();
+            
+            _singlePlayer = true;
+            HideMenu();
+        }
+
+        private void menuMultiButton_Click(object sender, RoutedEventArgs e)
+        {
+            _game = new TicTacToeGame();
+            ClearFields();
+
+            _singlePlayer = false;
+            HideMenu();
+        }
+
+        private void menuExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

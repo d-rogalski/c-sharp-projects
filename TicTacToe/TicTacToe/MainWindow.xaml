@@ -19,9 +19,38 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="fieldCrossStyle" TargetType="{x:Type Rectangle}">
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <ImageBrush ImageSource="images/cross.png" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="fieldCircleStyle" TargetType="{x:Type Rectangle}">
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <ImageBrush ImageSource="images/circle.png" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="menuButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="150" />
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="White" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="Lucida Sans" />
+            <Setter Property="BorderBrush" Value="Black" />
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="2" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
-        <Grid Width="450" Height="450" VerticalAlignment="Bottom">
+        <Grid x:Name="gameSpace" Width="450" Height="450" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="145*"/>
                 <ColumnDefinition Width="7.5"/>
@@ -50,6 +79,9 @@
                     <GradientStop Color="#FF85FF6C" Offset="1"/>
                 </LinearGradientBrush>
             </Grid.Background>
+            <Grid.Effect>
+                <BlurEffect x:Name="gameBlur" Radius="0"/>
+            </Grid.Effect>
             <!-- Grid lines -->
             <Rectangle Grid.Column="1" HorizontalAlignment="Left" Height="430" Margin="0,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="7.5" Grid.ColumnSpan="1" Grid.RowSpan="5" Fill="Black" RadiusX="5" RadiusY="5"/>
             <Rectangle Grid.Column="3" HorizontalAlignment="Left" Height="430" Margin="0,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="7.5" Grid.ColumnSpan="1" Grid.RowSpan="5" Fill="Black" RadiusX="5" RadiusY="5"/>
@@ -57,17 +89,32 @@
             <Rectangle Grid.Row="3" HorizontalAlignment="Left" Height="7.5" Margin="10,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="430" Grid.ColumnSpan="5" Grid.RowSpan="1" Fill="Black" RadiusX="5" RadiusY="5"/>
             <!-- Grid fields -->
             <!-- Row 1 -->
-            <Rectangle x:Name="field00" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="0"/>
-            <Rectangle x:Name="field01" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="145" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="1"/>
-            <Rectangle x:Name="field02" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="2"/>
+            <Rectangle x:Name="field0" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="0"/>
+            <Rectangle x:Name="field1" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="145" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="1"/>
+            <Rectangle x:Name="field2" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="2"/>
             <!-- Row 2 -->
-            <Rectangle x:Name="field10" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Width="135" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="3"/>
-            <Rectangle x:Name="field11" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="145" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="4"/>
-            <Rectangle x:Name="field12" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="135" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="5"/>
+            <Rectangle x:Name="field3" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Width="135" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="3"/>
+            <Rectangle x:Name="field4" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="145" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="4"/>
+            <Rectangle x:Name="field5" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="135" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="5"/>
             <!-- Row 3 -->
-            <Rectangle x:Name="field20" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Top" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="6"/>
-            <Rectangle x:Name="field21" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top" Width="145" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="7"/>
-            <Rectangle x:Name="field22" Grid.Column="4" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="8"/>
+            <Rectangle x:Name="field6" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Top" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="6"/>
+            <Rectangle x:Name="field7" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top" Width="145" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="7"/>
+            <Rectangle x:Name="field8" Grid.Column="4" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="8"/>
+        </Grid>
+        <Grid x:Name="mainMenu" Width="200" Height="300" UseLayoutRounding="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="70" />
+                <RowDefinition Height="70" />
+                <RowDefinition Height="70" />
+            </Grid.RowDefinitions>
+            <Rectangle Width="200" Height="300" RadiusX="10" RadiusY="10" Fill="#FFDDFFFD" Grid.RowSpan="5" Stroke="IndianRed" StrokeThickness="4"/>
+            <TextBlock Text="TicTacToe" FontSize="25" FontFamily="Lucida Sans" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock x:Name="menuResultTextBlock" Text="" FontSize="20" FontFamily="Lucida Sans" Foreground="IndianRed" FontWeight="Bold" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Button x:Name="menuSingleButton" Content="SINGLE PLAYER" Style="{StaticResource menuButtonStyle}" Grid.Row="2" Click="menuSingleButton_Click"/>
+            <Button x:Name="menuMultiButton" Content="MULTI PLAYER" Style="{StaticResource menuButtonStyle}" Grid.Row="3" Click="menuMultiButton_Click"/>
+            <Button x:Name="menuExitButton" Content="EXIT" Style="{StaticResource menuButtonStyle}" Grid.Row="4" Click="menuExitButton_Click"/>
         </Grid>
     </Grid>
 </Window>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,36 +15,8 @@ namespace TicTacToe
     {
         public enum Field { Empty = 2, Cross = 0, Circle = 1 };
 
-        public Field CurrentPlayer { get; private set; }
-
-        public int IsGameOver { 
-            get
-            {
-                // Horizontal lines
-                if (Board[0] == Board[1] && Board[1] == Board[2]) return 1;
-                if (Board[3] == Board[4] && Board[4] == Board[5]) return 1;
-                if (Board[6] == Board[7] && Board[7] == Board[8]) return 1;
-                // Vertical lines
-                if (Board[0] == Board[3] && Board[3] == Board[6]) return 1;
-                if (Board[1] == Board[4] && Board[4] == Board[7]) return 1;
-                if (Board[2] == Board[5] && Board[5] == Board[8]) return 1;
-                // Diagonals
-                if (Board[0] == Board[4] && Board[4] == Board[8]) return 1;
-                if (Board[2] == Board[4] && Board[4] == Board[6]) return 1;
-
-                bool isDraw = true;
-                for (int i = 0; i < 9; i++)
-                {
-                    if (Board[i] == Field.Empty)
-                    {
-                        isDraw = false; 
-                        break;
-                    }
-                }
-                return isDraw ? 2 : 0; 
-            } 
-        }
-
+        public Field Player { get; private set; }
+        public Field Opponent { get; private set; }
         public Field[] Board { get; private set; }
 
         private (int, int)[] _coords = new (int, int)[9] { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 0) };
@@ -54,97 +28,130 @@ namespace TicTacToe
             {
                 Board[i] = Field.Empty;
             }
-            CurrentPlayer = firstPlayer;
+            Player = firstPlayer;
+            Opponent = Player == Field.Cross ? Field.Circle : Field.Cross;
         }
 
         public TicTacToeGame Copy()
         {
             TicTacToeGame copy = new TicTacToeGame();
-            copy.CurrentPlayer = CurrentPlayer;
+            copy.Player = Player;
+            copy.Opponent = Opponent;
             Board.CopyTo(copy.Board, 0);
             return copy;
         }
 
-        public bool MakeMove(int field)
+        public int MakeMove(int field)
         {
             Debug.WriteLine(field);
             if (Board[field] == Field.Empty)
             {
-                Board[field] = CurrentPlayer;
-                CurrentPlayer = CurrentPlayer == Field.Cross ? Field.Circle : Field.Cross;
-                return true;
+                Debug.WriteLine("Done");
+                Board[field] = Player;
+                (Player, Opponent) = (Opponent, Player);
+                return field;
             }
-            else return false;
+            else return -1;
         }
 
-        public bool ComputerMove()
+        public int ComputerMove()
         {
-            MinMax ai = new MinMax(this);
-            ai.Calculate();
-            return MakeMove(ai.BestChoice);
+            return MakeMove(FindBestMove(Board));
         }
 
-        private class MinMax
+        private int FindBestMove(Field[] board)
         {
-            private Dictionary<int, int> _scores;
-            private TicTacToeGame _startGame;
-            private Field _currentPlayer;
-            private int _depth = 0;
-            public int BestChoice;
-
-            public MinMax(TicTacToeGame game)
+            int max = int.MinValue;
+            int bestMove = -1;
+            for (int i = 0; i < board.Length; i++)
             {
-                _startGame = game;
-                _currentPlayer = _startGame.CurrentPlayer;
-                _scores = new Dictionary<int, int>();
-            }
-
-            private int GetScore(TicTacToeGame game, int depth)
-            {
-                if (game.IsGameOver > 0)
+                if (board[i] == Field.Empty)
                 {
-                    if (_currentPlayer == game.CurrentPlayer) return -10 + depth;
-                    else return 10 - depth;
-                }
-                else return 0;
-            }
+                    board[i] = Player;
+                    int value = MiniMax(board, 0, false);
+                    board[i] = Field.Empty;
 
-            public void Calculate()
-            {
-                MinMaxAlgorithm(_startGame, 0);
-            }
-
-            private int MinMaxAlgorithm(TicTacToeGame game, int depth)
-            {
-                if (game.IsGameOver) return GetScore(game, depth);
-
-                List<int> scores = new();
-                List<int> moves = new();
-
-                for (int i = 0; i < 9; i++)
-                {
-                    if (game.Board[i] == Field.Empty)
+                    if (value > max)
                     {
-                        var nextState = game.Copy();
-                        nextState.MakeMove(i);
-                        moves.Add(i);
-                        scores.Add(MinMaxAlgorithm(nextState, depth + 1));
+                        max = value;
+                        bestMove = i;
                     }
                 }
+            }
+            return bestMove;
+        }
+        private int MiniMax(Field[] board, int depth, bool isMaxing)
+        {
+            Field? res = IsGameOver(board);
+            //Debug.WriteLine($"{depth} | {res} | {StringBoard(board)}");
+            if (res != null)
+            {
+                if (res == Field.Empty) return 0;
+                else if (res == Player) return 10 - depth;
+                else return -10 + depth;
+            }
 
-                if (game.CurrentPlayer == _currentPlayer)
+            if (isMaxing)
+            {
+                int best = int.MinValue;
+                for (int i = 0; i < board.Length; i++)
                 {
-                    int maxScoreIndex = scores.IndexOf(scores.Max());
-                    BestChoice = moves[maxScoreIndex];
-                    return scores[maxScoreIndex];
+                    if (board[i] == Field.Empty)
+                    {
+                        board[i] = Player;
+                        best = Math.Max(best, MiniMax(board, depth + 1, !isMaxing));
+                        board[i] = Field.Empty;
+                    }
                 }
-                else
+                return best;
+            }
+            else
+            {
+                int best = int.MaxValue;
+                for (int i = 0; i < board.Length; i++)
                 {
-                    int minScoreIndex = scores.IndexOf(scores.Min());
-                    BestChoice = moves[minScoreIndex];
-                    return scores[minScoreIndex];
+                    if (board[i] == Field.Empty)
+                    {
+                        board[i] = Opponent;
+                        best = Math.Min(best, MiniMax(board, depth + 1, !isMaxing));
+                        board[i] = Field.Empty;
+                    }
                 }
+                return best;
             }
         }
+        public string StringBoard(Field[] board)
+        {
+            string s = "";
+            foreach (Field f in board) s += f == Field.Empty ? "_" : f == Field.Cross ? "X" : "O";
+            return s;
+        }
+        private Field? IsGameOver(Field[] board)
+        {
+            // Horizontal lines
+            if (board[0] != Field.Empty && board[0] == board[1] && board[1] == board[2]) return board[0];
+            if (board[3] != Field.Empty && board[3] == board[4] && board[4] == board[5]) return board[3];
+            if (board[6] != Field.Empty && board[6] == board[7] && board[7] == board[8]) return board[6];
+            // Vertical lines
+            if (board[0] != Field.Empty && board[0] == board[3] && board[3] == board[6]) return board[0];
+            if (board[1] != Field.Empty && board[1] == board[4] && board[4] == board[7]) return board[1];
+            if (board[2] != Field.Empty && board[2] == board[5] && board[5] == board[8]) return board[2];
+            // Diagonals
+            if (board[0] != Field.Empty && board[0] == board[4] && board[4] == board[8]) return board[0];
+            if (board[2] != Field.Empty && board[2] == board[4] && board[4] == board[6]) return board[2];
+
+            bool isDraw = true;
+            for (int i = 0; i < 9; i++)
+            {
+                if (board[i] == Field.Empty)
+                {
+                    isDraw = false;
+                    break;
+                }
+            }
+            return isDraw ? Field.Empty : null;
+        }
+
+        public Field? IsGameOver() => IsGameOver(Board);
     }     
 }
