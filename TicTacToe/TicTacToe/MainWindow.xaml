@@ -5,34 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TicTacToe"
         mc:Ignorable="d"
-        Title="Tic Tac Toe" Height="500" Width="450" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Closed="Window_Closed">
+        Title="Tic Tac Toe" Height="500" Width="450" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <Style x:Key="fieldStyle" TargetType="{x:Type Rectangle}">
+        <Style x:Key="fieldStyle" x:Name="fieldEmptyStyle" TargetType="{x:Type Rectangle}">
             <Style.Resources>
                 <SolidColorBrush x:Key="mouseOver" Color="White" Opacity="0.1"/>
                 <SolidColorBrush x:Key="noMouseOver" Color="White" Opacity="0.0"/>
+                <ImageBrush x:Key="crossBrush" ImageSource="images/cross.png" />
+                <ImageBrush x:Key="circleBrush" ImageSource="images/circle.png" />
             </Style.Resources>
             <Setter Property="Fill" Value="{StaticResource noMouseOver}"/>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="local:RectangleExtension.FieldValue" Value="Empty" />
+                        <Condition Property="IsMouseOver" Value="True" />
+                    </MultiTrigger.Conditions>
                     <Setter Property="Fill" Value="{StaticResource mouseOver}"/>
+                </MultiTrigger>
+                <Trigger Property="local:RectangleExtension.FieldValue" Value="Circle">
+                    <Setter Property="Fill" Value="{StaticResource circleBrush}" />
+                    <Setter Property="IsEnabled" Value="False" />
+                </Trigger>
+                <Trigger Property="local:RectangleExtension.FieldValue" Value="Cross">
+                    <Setter Property="Fill" Value="{StaticResource crossBrush}" />
+                    <Setter Property="IsEnabled" Value="False" />
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="fieldCrossStyle" TargetType="{x:Type Rectangle}">
-            <Setter Property="Fill">
-                <Setter.Value>
-                    <ImageBrush ImageSource="images/cross.png" />
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="fieldCircleStyle" TargetType="{x:Type Rectangle}">
-            <Setter Property="Fill">
-                <Setter.Value>
-                    <ImageBrush ImageSource="images/circle.png" />
-                </Setter.Value>
-            </Setter>
-        </Style>
+
         <Style x:Key="menuButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Width" Value="150" />
             <Setter Property="Height" Value="40"/>
@@ -82,6 +83,7 @@
             <Grid.Effect>
                 <BlurEffect x:Name="gameBlur" Radius="0"/>
             </Grid.Effect>
+            
             <!-- Grid lines -->
             <Rectangle Grid.Column="1" HorizontalAlignment="Left" Height="430" Margin="0,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="7.5" Grid.ColumnSpan="1" Grid.RowSpan="5" Fill="Black" RadiusX="5" RadiusY="5"/>
             <Rectangle Grid.Column="3" HorizontalAlignment="Left" Height="430" Margin="0,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="7.5" Grid.ColumnSpan="1" Grid.RowSpan="5" Fill="Black" RadiusX="5" RadiusY="5"/>
@@ -89,17 +91,17 @@
             <Rectangle Grid.Row="3" HorizontalAlignment="Left" Height="7.5" Margin="10,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="430" Grid.ColumnSpan="5" Grid.RowSpan="1" Fill="Black" RadiusX="5" RadiusY="5"/>
             <!-- Grid fields -->
             <!-- Row 1 -->
-            <Rectangle x:Name="field0" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="0"/>
-            <Rectangle x:Name="field1" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="145" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="1"/>
-            <Rectangle x:Name="field2" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="2"/>
+            <Rectangle x:Name="field0" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="0" local:RectangleExtension.FieldValue="{Binding Board[0], UpdateSourceTrigger=PropertyChanged}"/>
+            <Rectangle x:Name="field1" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="145" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="1" local:RectangleExtension.FieldValue="{Binding Board[1], UpdateSourceTrigger=PropertyChanged}"/>
+            <Rectangle x:Name="field2" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="2" local:RectangleExtension.FieldValue="{Binding Board[2], UpdateSourceTrigger=PropertyChanged}"/>
             <!-- Row 2 -->
-            <Rectangle x:Name="field3" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Width="135" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="3"/>
-            <Rectangle x:Name="field4" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="145" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="4"/>
-            <Rectangle x:Name="field5" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="135" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="5"/>
+            <Rectangle x:Name="field3" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Width="135" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="3" local:RectangleExtension.FieldValue="{Binding Board[3], UpdateSourceTrigger=PropertyChanged}"/>
+            <Rectangle x:Name="field4" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="145" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="4" local:RectangleExtension.FieldValue="{Binding Board[4], UpdateSourceTrigger=PropertyChanged}"/>
+            <Rectangle x:Name="field5" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="135" Height="145" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="5" local:RectangleExtension.FieldValue="{Binding Board[5], UpdateSourceTrigger=PropertyChanged}"/>
             <!-- Row 3 -->
-            <Rectangle x:Name="field6" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Top" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="6"/>
-            <Rectangle x:Name="field7" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top" Width="145" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="7"/>
-            <Rectangle x:Name="field8" Grid.Column="4" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="8"/>
+            <Rectangle x:Name="field6" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Top" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="6" local:RectangleExtension.FieldValue="{Binding Board[6], UpdateSourceTrigger=PropertyChanged}"/>
+            <Rectangle x:Name="field7" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top" Width="145" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="7" local:RectangleExtension.FieldValue="{Binding Board[7], UpdateSourceTrigger=PropertyChanged}"/>
+            <Rectangle x:Name="field8" Grid.Column="4" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Height="135" Margin="0,0,0,0" Style="{StaticResource fieldStyle}" MouseDown="field_MouseDown" Uid="8" local:RectangleExtension.FieldValue="{Binding Board[8], UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <Grid x:Name="mainMenu" Width="200" Height="300" UseLayoutRounding="False">
             <Grid.RowDefinitions>

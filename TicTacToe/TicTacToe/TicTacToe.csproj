@@ -17,12 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="images\circle.png">
+    <Resource Include="images\circle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\cross.png">
+    </Resource>
+    <Resource Include="images\cross.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Resource>
   </ItemGroup>
 
 </Project>
