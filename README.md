@@ -15,9 +15,6 @@ A simple console application allowing to play a game of guessing random numbers.
 
 The game has 5 difficulty levels differing in the range of numbers to guess, so the probability of a correct guess. The score is calculated as a percentage of correct guesses so far.
 
-#### Technologies and elements worth noting
-- `DoInRobust` method that invokes an action until no exception is met. It was used to ensure proper user's input.
-
 
 ### [Notebook App](NoteApp)
 A WPF application that serves as a notebook.
@@ -30,7 +27,7 @@ You can read, add, edit and delete notes with titles and creation date. The note
 
 
 ### [Phone Book App](PhoneBook)
-A WPF application that serbes as a phone book with detailed contacts.
+A WPF application that serves as a phone book with detailed contacts.
 
 The application requires a dedicated MSSQL database PhoneBook with stored procedures `AddContact`, `UpdateContact` and `UpdateContactIcon`, and a single entity, Contact, containing the following fields:
 - Id (`int`) - primary key
@@ -53,4 +50,18 @@ The application also has a logging system implented that logs any changes in the
 - MSSQL database connection
 - Custom logging system
 - Working with images, employing ImageBrush and ImageSource classes
-- XAML triggers for TextBox placeholder and changin the properties of controls during mouse hovering
+- XAML triggers for TextBox placeholder and changing the properties of controls during mouse hovering
+
+
+### [Tic-Tac-Toe Game](TicTacToe)
+A simple game created as a WPF application.
+
+The game has a main menu that allows you to play either in the single player mode, versus the computer, or in the multi player mode so versus another person who is with you. 
+
+The game utilizes the MiniMax algorithm for choosing the best move by computer which in the case of Tic-Tac-Toe game makes it impossible to win against it.
+
+#### Technologies and elements worth noting
+- WPF (XAML code)
+- Data binding of controls in the UI to the ViewModel properties
+- XAML triggers
+- MiniMax algorithm
